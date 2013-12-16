@@ -56,8 +56,8 @@ uint32_t CurrAddress;
  */
 bool RunBootloader = true;
 
-/* Adafruit Mods - make the bootloader 'time out' after 10 seconds */
-#define BOOTLOADTIMEOUT 5  // in approx 1/2 seconds units :)
+/* Adafruit Mods - make the bootloader 'time out' after 30 seconds */
+#define BOOTLOADTIMEOUT 60  // in approx 1/2 seconds units :)
 volatile uint8_t boottimeout = 0;  // the counter we'll use
 
 // the pointer to user land
@@ -67,6 +67,8 @@ void (*app_start)(void) = 0x0000;
 #define BOARD_MICROTOUCH 1
 #define BOARD_ADAFRUIT32U4 2
 #define BOARD_FLORA 3
+#define BOARD_BRAINWAVE 4
+#define BOARD_BRAINWAVE2 5
 
 #if BOARD == BOARD_MICROTOUCH
    #define BOOTLOADERLED_DDR DDRC
@@ -83,6 +85,18 @@ void (*app_start)(void) = 0x0000;
    #define BOOTLOADERLED_PORT PORTE
    #define BOOTLOADERLED 6
 #endif
+#if BOARD == BOARD_BRAINWAVE
+   #define BOOTLOADERLED_DDR DDRE
+   #define BOOTLOADERLED_PORT PORTE
+   #define BOOTLOADERLED 7
+#endif
+#if BOARD == BOARD_BRAINWAVE2
+   #define BOOTLOADERLED_DDR DDRE
+   #define BOOTLOADERLED_PORT PORTE
+   #define BOOTLOADERLED 0
+#endif
+   
+   
 
 #include <util/delay.h>
 
@@ -142,6 +156,39 @@ int main(void)
   }
 
   /* End Adafruit Mods */
+
+  /* Start Brainwave Mods */
+#if BOARD == BOARD_BRAINWAVE
+  // Disable stepper drivers
+  // X_enable == PD4
+  // Y_enable == PE0
+  // Z_enable == PC2
+  // E_enable == PC6
+  DDRB |= _BV(PD4);
+  PORTB |= _BV(PD4);
+  DDRE |= _BV(PE0);
+  PORTE |= _BV(PE0);
+  DDRE |= _BV(PC2);
+  PORTE |= _BV(PC2);
+  DDRC |= _BV(PC6);
+  PORTC |= _BV(PC6);
+#endif
+#if BOARD == BOARD_BRAINWAVE2
+  // Disable stepper drivers
+  // X_enable == PB0
+  // Y_enable == PE7
+  // Z_enable == PE5
+  // E_enable == PC3
+  DDRB |= _BV(PB0);
+  PORTB |= _BV(PB0);
+  DDRE |= _BV(PE7);
+  PORTE |= _BV(PE7);
+  DDRE |= _BV(PE5);
+  PORTE |= _BV(PE5);
+  DDRC |= _BV(PC3);
+  PORTC |= _BV(PC3);
+#endif
+  /* End Brainwave Mods */
 
 	/* Setup hardware required for the bootloader */
 	SetupHardware();

@@ -48,7 +48,7 @@
 
 
 # MCU name
-MCU = atmega32u4
+MCU = at90usb1286
 
 
 # Target board (see library "Board Types" documentation, NONE for projects not requiring
@@ -56,8 +56,10 @@ MCU = atmega32u4
 # "Board" inside the application directory.
 
 #BOARD  = MICROTOUCH
-BOARD  = ADAFRUIT32U4
+#BOARD  = ADAFRUIT32U4
 #BOARD = FLORA
+#BOARD = BRAINWAVE
+BOARD = BRAINWAVE2
 
 # Processor frequency.
 #     This will define a symbol, F_CPU, in all source code files equal to the 
@@ -98,7 +100,7 @@ F_CLOCK = $(F_CPU)
 #
 # Note that the bootloader size and start address given in AVRStudio is in words and not
 # bytes, and so will need to be doubled to obtain the byte address needed by AVR-GCC.
-BOOT_START = 0x7000
+BOOT_START = 0x1F000
 
 
 # Output format. (can be srec, ihex, binary)
